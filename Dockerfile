@@ -1,5 +1,10 @@
 FROM libretranslate/libretranslate:latest
 
-# Explicitly start LibreTranslate with Render's PORT
-CMD ltserver --host 0.0.0.0 --port $PORT
+# Copy the start script
+COPY start.sh /start.sh
 
+# Make the script executable
+RUN chmod +x /start.sh
+
+# Set the entrypoint to the start script
+ENTRYPOINT ["/start.sh"]
