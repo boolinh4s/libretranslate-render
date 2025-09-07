@@ -78,8 +78,42 @@ LibreTranslate supports many language pairs. You can get the list of supported l
 - Consider upgrading to a paid plan for production use
 - Monitor your usage to avoid unexpected charges
 
+## Testing Your Deployment
+
+Once deployed, you can test your LibreTranslate instance:
+
+```bash
+# Test the deployment
+python test-deployment.py https://your-service-name.onrender.com
+```
+
 ## Troubleshooting
 
-- If the service fails to start, check the logs in your Render dashboard
-- Initial startup may take several minutes as language models are downloaded
-- For better performance, consider using the paid plans with more CPU and memory
+### Common Issues:
+
+1. **"No open ports detected"**
+   - This usually means the service isn't binding to the correct port
+   - Check the logs for "LibreTranslate Startup" messages
+   - Ensure the PORT environment variable is being used correctly
+
+2. **Service takes long to start**
+   - Initial startup takes 3-5 minutes as language models download
+   - Check logs for download progress
+   - Consider upgrading to a paid plan for faster startup
+
+3. **Health check failures**
+   - The `/languages` endpoint may take time to respond initially
+   - Wait for model loading to complete
+   - Check service logs for errors
+
+4. **Memory issues**
+   - LibreTranslate requires significant memory for language models
+   - Free tier may not be sufficient for all language pairs
+   - Consider upgrading to Starter plan or higher
+
+### Debugging Steps:
+
+1. Check Render service logs for startup messages
+2. Verify the service is listening on the correct port
+3. Test endpoints manually once the service is running
+4. Monitor memory usage in Render dashboard

@@ -1,7 +1,38 @@
 FROM libretranslate/libretranslate:latest
 
-# Expose the port that LibreTranslate runs on
-EXPOSE 5000
+# Install bash for our startup script
+USER root
+RUN apt-get update && apt-get install -y bash && rm -rf /var/lib/apt/lists/*
 
-# Start LibreTranslate with explicit arguments
-CMD ["sh", "-c", "libretranslate --host 0.0.0.0 --port ${PORT:-5000} --threads 4 --char-limit 5000 --req-limit 200 --batch-limit 32"]
+# Create startup script
+RUN cat > /start.sh << 'EOF'
+#!/bin/bash
+set -e
+
+# Get the port from environment or default to 5000
+PORT=${PORT:-5000}
+
+echo "=== LibreTranslate Startup ==="
+echo "Host: 0.0.0.0"
+echo "Port: $PORT"
+echo "=========================="
+
+# Start LibreTranslate with the correct port
+exec libretranslate \
+  --host 0.0.0.0 \
+  --port $PORT \
+  --threads 4 \
+  --char-limit 5000 \
+  --req-limit 200 \
+  --batch-limit 32
+EOF
+
+RUN chmod +x /start.sh
+
+# Switch back to libretranslate user
+USER libretranslate
+
+# Expose the port
+EXPOSE $PORT
+
+CMD ["/start.sh"]
