@@ -1,7 +1,7 @@
 FROM libretranslate/libretranslate:latest
 
-# Expose port 10000 for Render
 EXPOSE 10000
 
-# Override the default port (5000) to use Render's expected port (10000)
-CMD ["libretranslate", "--host", "0.0.0.0", "--port", "10000"]
+# Use environment variables instead of command line arguments
+ENV LT_HOST=0.0.0.0
+ENV LT_PORT=10000
