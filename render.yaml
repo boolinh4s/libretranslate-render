@@ -4,6 +4,5 @@ services:
     env: docker
     dockerfilePath: ./Dockerfile
     plan: free
-    region: oregon
-    healthCheckPath: /languages
+    region: frankfurt
     autoDeploy: true

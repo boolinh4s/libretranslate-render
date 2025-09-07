@@ -1,0 +1,15 @@
+FROM libretranslate/libretranslate:latest
+
+# Install curl for health checks
+USER root
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+
+# Switch back to libretranslate user  
+USER libretranslate
+
+# Expose the port that Render expects
+EXPOSE 10000
+
+# Use the default entrypoint but override the port
+ENTRYPOINT ["libretranslate"]
+CMD ["--host", "0.0.0.0", "--port", "10000"]
