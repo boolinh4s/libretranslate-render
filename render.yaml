@@ -2,9 +2,10 @@ services:
   - type: web
     name: libretranslate
     env: docker
-    plan: starter
-    dockerfilePath: ./Dockerfile
+    plan: free
+    autoDeploy: true
+    region: frankfurt  # or frankfurt, depending on your location
     healthCheckPath: /languages
     envVars:
-      - key: PYTHONUNBUFFERED
-        value: "1"
+      - key: LT_PORT
+        value: 5000
