@@ -3,24 +3,11 @@ FROM libretranslate/libretranslate:latest
 # Expose the port that LibreTranslate runs on
 EXPOSE 5000
 
-# Set environment variables for production
-ENV LT_HOST=0.0.0.0
-ENV LT_PORT=5000
-ENV LT_THREADS=4
-ENV LT_CHAR_LIMIT=5000
-ENV LT_REQ_LIMIT=200
-ENV LT_BATCH_LIMIT=32
-ENV LT_GA_ID=""
-ENV LT_FRONTEND_LANGUAGE_SOURCE=auto
-ENV LT_FRONTEND_LANGUAGE_TARGET=en
-ENV LT_FRONTEND_TIMEOUT=500
-ENV LT_API_KEYS=false
-ENV LT_REQUIRE_API_KEY_ORIGIN=""
-ENV LT_LOAD_ONLY=""
-ENV LT_SUGGESTIONS=false
-ENV LT_DISABLE_FILES_TRANSLATION=false
-ENV LT_DISABLE_WEB_UI=false
-ENV LT_UPDATE_MODELS=false
-
-# Start LibreTranslate
-CMD ["libretranslate"]
+# Start LibreTranslate with explicit arguments
+CMD ["libretranslate", \
+     "--host", "0.0.0.0", \
+     "--port", "5000", \
+     "--threads", "4", \
+     "--char-limit", "5000", \
+     "--req-limit", "200", \
+     "--batch-limit", "32"]

@@ -4,23 +4,4 @@ services:
     env: docker
     plan: starter
     dockerfilePath: ./Dockerfile
-    envVars:
-      - key: LT_HOST
-        value: 0.0.0.0
-      - key: LT_PORT
-        value: 5000
-      - key: LT_THREADS
-        value: 4
-      - key: LT_CHAR_LIMIT
-        value: 5000
-      - key: LT_REQ_LIMIT
-        value: 200
-      - key: LT_BATCH_LIMIT
-        value: 32
-      - key: LT_API_KEYS
-        value: false
-      - key: LT_DISABLE_WEB_UI
-        value: false
-      - key: LT_UPDATE_MODELS
-        value: false
-    healthCheckPath: /
+    healthCheckPath: /languages
