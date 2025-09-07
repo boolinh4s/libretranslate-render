@@ -4,4 +4,4 @@ services:
     env: docker
     plan: starter
     dockerfilePath: ./Dockerfile
-    healthCheckPath: /languages
+    healthCheckPath: /
