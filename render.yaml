@@ -16,5 +16,17 @@ services:
         value: "0.0.0.0"
       - key: LT_PORT
         value: "10000"
-    healthCheckPath: /
+      - key: LT_THREADS
+        value: "1"
+      - key: LT_CHAR_LEVEL
+        value: "true"
+      - key: LT_UPDATE_MODELS
+        value: "true"
+      - key: LT_METRICS
+        value: "false"
+      - key: LT_DISABLE_FILES_TRANSLATION
+        value: "true"
+    healthCheckPath: /languages
     autoDeploy: true
+    buildCommand: echo "Building LibreTranslate..."
+    startCommand: python app.py
