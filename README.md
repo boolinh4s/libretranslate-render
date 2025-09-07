@@ -1,153 +1,85 @@
-# LibreTranslate on Render
+# LibreTranslate on Render.com
 
-This repository contains the configuration to deploy LibreTranslate on Render.com's free tier.
+This repository contains the configuration to deploy LibreTranslate on Render.com.
 
-## Features
+## What is LibreTranslate?
 
-- ✅ Free hosting on Render.com
-- ✅ Pre-loaded with 10 common languages (en, fr, es, de, it, pt, ru, zh, ja, ko)
-- ✅ Web UI enabled for testing
-- ✅ Optimized for Render's free tier (512MB RAM)
-- ✅ Health checks and monitoring
-- ✅ CORS enabled for web applications
+LibreTranslate is a free and open source machine translation API, entirely self-hosted. It provides translation services without relying on proprietary providers.
 
-## Quick Deploy to Render
+## Deployment
 
-1. **Fork this repository** to your GitHub account
-2. **Go to Render.com** and create a new Web Service
-3. **Connect your GitHub** repository
-4. **Use these settings:**
-   - Environment: `Docker`
-   - Plan: `Free`
-   - Auto-Deploy: `Yes`
-5. **Deploy!** (Takes 10-15 minutes for first deployment)
+### Option 1: Deploy via Render Dashboard
 
-## Manual Deployment Steps
+1. Fork this repository to your GitHub account
+2. Connect your GitHub account to Render.com
+3. Create a new Web Service on Render
+4. Connect your forked repository
+5. Render will automatically detect the `render.yaml` file and deploy
 
-### 1. Create GitHub Repository
-```bash
-git clone <this-repo>
-cd libretranslate-render
-git remote set-url origin https://github.com/YOUR_USERNAME/libretranslate-render.git
-git push -u origin main
-```
+### Option 2: Deploy via Blueprint
 
-### 2. Deploy on Render
-- Go to https://dashboard.render.com/
-- Click "New +" → "Web Service"
-- Connect your GitHub repository
-- Configure:
-  - **Name:** `libretranslate`
-  - **Environment:** `Docker`
-  - **Plan:** `Free`
-  - **Auto-Deploy:** `Yes`
+1. Click the "Deploy to Render" button below
+2. Connect your GitHub account if prompted
+3. The service will be deployed automatically
 
-### 3. Wait for Deployment
-- First deployment takes 10-15 minutes
-- Models are downloaded and cached
-- Monitor logs for "Running on http://0.0.0.0:10000"
-
-## Usage
-
-### Web Interface
-Visit your Render URL: `https://your-app-name.onrender.com`
-
-### API Usage
-```bash
-# Test translation
-curl -X POST https://your-app-name.onrender.com/translate \
-  -H "Content-Type: application/json" \
-  -d '{"q":"Hello world","source":"en","target":"fr","format":"text"}'
-
-# Get available languages
-curl https://your-app-name.onrender.com/languages
-```
-
-### JavaScript/React Usage
-```javascript
-const translateText = async (text, from, to) => {
-  const response = await fetch('https://your-app-name.onrender.com/translate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      q: text,
-      source: from,
-      target: to,
-      format: 'text'
-    })
-  });
-  
-  const result = await response.json();
-  return result.translatedText;
-};
-```
-
-## Testing Your Deployment
-
-Use the included test script:
-```bash
-python test.py https://your-app-name.onrender.com
-```
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
 ## Configuration
 
-### Supported Languages
-- English (en)
-- French (fr)
-- Spanish (es)
-- German (de)
-- Italian (it)
-- Portuguese (pt)
-- Russian (ru)
-- Chinese (zh)
-- Japanese (ja)
-- Korean (ko)
+The service is configured with the following default settings:
+
+- **Port**: 5000
+- **Character limit**: 5000 characters per request
+- **Request limit**: 200 requests per minute
+- **Batch limit**: 32 texts per batch request
+- **API Keys**: Disabled (public access)
+- **Web UI**: Enabled
+- **Threads**: 4
 
 ### Environment Variables
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `LT_HOST` | `0.0.0.0` | Host to bind to |
-| `LT_PORT` | `10000` | Port to bind to (Render requirement) |
-| `LT_THREADS` | `1` | Number of threads (optimized for free tier) |
-| `LT_CHAR_LEVEL` | `true` | Enable character-level translation |
-| `LT_UPDATE_MODELS` | `true` | Auto-update models |
-| `LT_DISABLE_WEB_UI` | `false` | Enable web interface |
-| `LT_API_KEYS` | `false` | Disable API key requirement |
-| `LT_LOAD_ONLY` | `en,fr,es,de,it,pt,ru,zh,ja,ko` | Languages to load |
-| `LT_METRICS` | `false` | Disable metrics (saves memory) |
-| `LT_DISABLE_FILES_TRANSLATION` | `true` | Disable file uploads (saves memory) |
 
-## Render Free Tier Limitations
+You can customize the deployment by modifying the environment variables in `render.yaml`:
 
-- **Memory:** 512MB RAM
-- **Sleep:** Service sleeps after 15 minutes of inactivity
-- **Cold Start:** First request after sleep takes 30-60 seconds
-- **Monthly Hours:** 750 hours per month
-- **Build Time:** 10-15 minutes for first deployment
+- `LT_CHAR_LIMIT`: Maximum characters per translation request
+- `LT_REQ_LIMIT`: Maximum requests per minute per IP
+- `LT_BATCH_LIMIT`: Maximum number of texts in a batch request
+- `LT_API_KEYS`: Set to `true` to require API keys
+- `LT_DISABLE_WEB_UI`: Set to `true` to disable the web interface
+- `LT_LOAD_ONLY`: Comma-separated list of language codes to load only specific models
+
+## Usage
+
+Once deployed, your LibreTranslate instance will be available at your Render service URL.
+
+### API Example
+
+```bash
+curl -X POST "https://your-service-name.onrender.com/translate" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "q": "Hello, world!",
+       "source": "en",
+       "target": "es"
+     }'
+```
+
+### Web Interface
+
+Visit your service URL in a browser to access the web interface for translations.
+
+## Supported Languages
+
+LibreTranslate supports many language pairs. You can get the list of supported languages by making a GET request to `/languages`.
+
+## Cost Considerations
+
+- Render's free tier includes 750 hours per month
+- LibreTranslate can be resource-intensive, especially with multiple language models
+- Consider upgrading to a paid plan for production use
+- Monitor your usage to avoid unexpected charges
 
 ## Troubleshooting
 
-### Deployment Issues
-- Ensure repository is public
-- Check Render build logs for errors
-- Verify Dockerfile syntax
-
-### Memory Issues
-- Reduce languages in `LT_LOAD_ONLY`
-- Set `LT_THREADS=1`
-- Keep `LT_METRICS=false`
-
-### Slow Response
-- First request after sleep is always slow (cold start)
-- Consider upgrading to paid plan for always-on service
-
-### Connection Issues
-- Check if service is sleeping
-- Verify CORS headers for web requests
-- Test with curl first
-
-## Support
-
-- LibreTranslate Documentation: https://github.com/LibreTranslate/LibreTranslate
-- Render Documentation: https://render.com/docs
-- Issues: Create an issue in this repository
+- If the service fails to start, check the logs in your Render dashboard
+- Initial startup may take several minutes as language models are downloaded
+- For better performance, consider using the paid plans with more CPU and memory

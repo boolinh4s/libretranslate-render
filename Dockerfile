@@ -1,13 +1,26 @@
 FROM libretranslate/libretranslate:latest
 
-# Copy the patch script
-COPY patch_app.py /patch_app.py
+# Expose the port that LibreTranslate runs on
+EXPOSE 5000
 
-# Run the patch script
-RUN python /patch_app.py
+# Set environment variables for production
+ENV LT_HOST=0.0.0.0
+ENV LT_PORT=5000
+ENV LT_THREADS=4
+ENV LT_CHAR_LIMIT=5000
+ENV LT_REQ_LIMIT=200
+ENV LT_BATCH_LIMIT=32
+ENV LT_GA_ID=""
+ENV LT_FRONTEND_LANGUAGE_SOURCE=auto
+ENV LT_FRONTEND_LANGUAGE_TARGET=en
+ENV LT_FRONTEND_TIMEOUT=500
+ENV LT_API_KEYS=false
+ENV LT_REQUIRE_API_KEY_ORIGIN=""
+ENV LT_LOAD_ONLY=""
+ENV LT_SUGGESTIONS=false
+ENV LT_DISABLE_FILES_TRANSLATION=false
+ENV LT_DISABLE_WEB_UI=false
+ENV LT_UPDATE_MODELS=false
 
-# Copy the start script
-COPY start.sh /start.sh
-
-# Run the script with bash
-ENTRYPOINT ["bash", "/start.sh"]
+# Start LibreTranslate
+CMD ["libretranslate"]
